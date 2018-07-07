@@ -4,6 +4,26 @@ class Personnage
     private $_force;
     private $_experience;
     private $_degats;
+    private $_name;
+
+    public function __construct($name, $force, $experience, $degats)
+    {
+        $this->setName($name);
+        $this->setForce($force);
+        $this->setExperience($experience);
+        $this->setDegats($degats);
+    }
+
+    public function frapper(Personnage $cible)
+    {
+        $cible->setDegats($cible->degats() + $this->force());
+    }
+
+    public function etat()
+    {
+        echo $this->name() . ' possède ' . $this->force() . ' points en force, ' . $this->experience() . 
+        ' points d\'expérience, et a encaissé ' . $this->degats() . ' points de dégâts.<br>';
+    }
 
     // Mutateurs - Setters
     public function setForce($force)
@@ -57,15 +77,21 @@ class Personnage
         $this->_degats = $degats;
     }
 
+    public function setName($name)
+    {
+        if(!is_string($name))
+        {
+            trigger_error('Le nom doit être une chaîne de caractères.', E_USER_WARNING);
+            return;
+        }
+
+        $this->_name = $name;
+    }
+
     // Accesseurs - Getters
     public function force()
     {
         return $this->_force;
-    }
-    
-    public function localisation()
-    {
-        return $this->_localisation;
     }
 
     public function experience()
@@ -78,7 +104,24 @@ class Personnage
         return $this->_degats;
     }
 
+    public function name()
+    {
+        return $this->_name;
+    }
+
 }
 
-$perso = new Personnage;
+$perso1 = new Personnage('Jean', 15, 0, 0);
+$perso2 = new Personnage('Paul', 10, 0, 0);
+
+$perso1->etat();
+$perso2->etat();
+
+do
+{
+    $perso1->frapper($perso2);
+    $perso2->frapper($perso1);
+    $perso1->etat();
+    $perso2->etat();
+}while($perso1->degats() < 80 && $perso2->degats() < 80)
 ?>
