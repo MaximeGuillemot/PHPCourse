@@ -1,1 +1,3 @@
-Hello world and hello again
+<?php
+
+require 'Personnage.php';
