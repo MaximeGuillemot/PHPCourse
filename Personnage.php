@@ -5,13 +5,21 @@ class Personnage
     private $_experience;
     private $_degats;
     private $_name;
+    private static $_statique = 'Je suis un attribut statique et suis unique. Si un objet de cette classe me modifie, je suis modiifé pour toutes les autres instances aussi.';
+    private static $_compteur = 0;
 
-    public function __construct($name, $force, $experience, $degats)
+    const FORCE_PETITE = 20;
+    const FORCE_MOYENNE = 50;
+    const FORCE_GRANDE = 80;
+
+    public function __construct($name, $force)
     {
         $this->setName($name);
         $this->setForce($force);
-        $this->setExperience($experience);
-        $this->setDegats($degats);
+        $this->setExperience(0);
+        $this->setDegats(0);
+
+        self::setCompteur(self::compteur() + 1);
     }
 
     public function frapper(Personnage $cible)
@@ -23,6 +31,11 @@ class Personnage
     {
         echo $this->name() . ' possède ' . $this->force() . ' points en force, ' . $this->experience() . 
         ' points d\'expérience, et a encaissé ' . $this->degats() . ' points de dégâts.<br>';
+    }
+
+    public static function parler()
+    {
+        echo 'Je suis une méthode statique (donc de classe).<br>';
     }
 
     // Mutateurs - Setters
@@ -39,8 +52,11 @@ class Personnage
             trigger_error('La force doit être comprise entre 0 et 100.', E_USER_WARNING);
             return;
         }
-        
-        $this->_force = $force;
+
+        if(in_array($force, [self::FORCE_PETITE, self::FORCE_MOYENNE, self::FORCE_GRANDE]))
+        {
+            $this->_force = $force;
+        }        
     }
 
     public function setExperience($experience)
@@ -88,6 +104,11 @@ class Personnage
         $this->_name = $name;
     }
 
+    public static function setCompteur($compteur)
+    {
+        self::$_compteur = $compteur;
+    }
+
     // Accesseurs - Getters
     public function force()
     {
@@ -107,6 +128,16 @@ class Personnage
     public function name()
     {
         return $this->_name;
+    }
+
+    public static function statique()
+    {
+        return self::$_statique;
+    }
+
+    public static function compteur()
+    {
+        return self::$_compteur;
     }
 
 }

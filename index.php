@@ -6,8 +6,11 @@ function loadClass($class)
 
 spl_autoload_register('loadClass'); // On enregistre la fonction en autoload pour qu'elle soit appelée dès qu'on instanciera une classe non déclarée.
 
-$perso1 = new Personnage('Jean', 15, 0, 0);
-$perso2 = new Personnage('Paul', 10, 0, 0);
+echo '<br>Nombre de personnages instanciés : ' . Personnage::compteur() . '<br>';
+$perso1 = new Personnage('Jean', Personnage::FORCE_PETITE);
+echo '<br>Nombre de personnages instanciés : ' . Personnage::compteur() . '<br>';
+$perso2 = new Personnage('Paul', Personnage::FORCE_MOYENNE);
+echo '<br>Nombre de personnages instanciés : ' . Personnage::compteur() . '<br>';
 
 $perso1->etat();
 $perso2->etat();
@@ -19,5 +22,9 @@ do
     $perso1->etat();
     $perso2->etat();
 }while($perso1->degats() < 80 && $perso2->degats() < 80);
+
+Personnage::parler();
+
+echo Personnage::statique();
 
 ?>
