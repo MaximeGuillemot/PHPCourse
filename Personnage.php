@@ -22,6 +22,19 @@ class Personnage
         self::setCompteur(self::compteur() + 1);
     }
 
+    public function hydrate(array $data)
+    {
+        foreach ($data as $key => $value)
+        {
+            $method = 'set' . ucfirst($key);
+            
+            if(method_exists($this, $method))
+            {
+                $this->method($value);
+            }
+        }
+    }
+
     public function frapper(Personnage $cible)
     {
         $cible->setDegats($cible->degats() + $this->force());
